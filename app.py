@@ -16,6 +16,9 @@ def api():
         string = request.data
         #return the string in the response body
         return solve_question(string)
+    else:
+        #return an error if the request method is not POST with the correct HTTP code
+        return 'Method not allowed', 405
 
 
 if __name__ == '__main__':
