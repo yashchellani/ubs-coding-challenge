@@ -10,24 +10,37 @@ logger = logging.getLogger(__name__)
 
 @app.route('/greedymonkey', methods=['POST'])
 def greedymonkey():
-    # Parse the JSON input
     data = json.loads(request.data)
-    w = data["w"]  # Maximum weight the monkey can lift
-    v = data["v"]  # Volume of the basket
-    f = data["f"]  # List of fruits with weight, volume, and value
+    w = data["w"]
+    v = data["v"]
+    f = data["f"]
 
-    # Initialize a 2D table to store the maximum value at each state (i, j)
-    dp = [[0] * (v + 1) for _ in range(w + 1)]
+    max_value = max_monkey_value(w, v, f)
 
-    # Fill in the table using dynamic programming
-    for fruit in f:
-        weight, volume, value = fruit
-        for i in range(w, weight - 1, -1):
-            for j in range(v, volume - 1, -1):
-                dp[i][j] = max(dp[i][j], dp[i - weight][j - volume] + value)
-
-    # The maximum value is stored in dp[w][v]
-    max_value = dp[w][v]
-
-    # Return the maximum value as a string
     return str(max_value)
+
+
+def max_monkey_value_memo(w, v, f, n, memo):
+    if n == 0 or w == 0 or v == 0:
+        return 0
+
+    if memo[w][v][n] != -1:
+        return memo[w][v][n]
+
+    weight, volume, value = f[n - 1]
+
+    if weight > w or volume > v:
+        result = max_monkey_value_memo(w, v, f, n - 1, memo)
+    else:
+        include_fruit = value + max_monkey_value_memo(w - weight, v - volume, f, n - 1, memo)
+        exclude_fruit = max_monkey_value_memo(w, v, f, n - 1, memo)
+        result = max(include_fruit, exclude_fruit)
+
+    memo[w][v][n] = result
+    return result
+
+def max_monkey_value(w, v, f):
+    n = len(f)
+    memo = [[[-1 for _ in range(n + 1)] for _ in range(v + 1)] for _ in range(w + 1)]
+    
+    return max_monkey_value_memo(w, v, f, n, memo)
