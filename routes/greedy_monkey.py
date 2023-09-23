@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 @app.route('/greedymonkey', methods=['POST'])
 def greedymonkey():
     data = json.loads(request.data)
-    logging.info("data sent for evaluation {}".format(data))
+    logging.info("data sent for evaluation {}".format(json.dumps(data)))
     w = data["w"]
     v = data["v"]
     f = data["f"]
