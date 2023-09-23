@@ -1,25 +1,28 @@
-from flask import Flask, request
-from question1 import solve_question
+import logging
+import socket
 
-app = Flask(__name__)
+from routes import app
 
-
-@app.route('/')
-def hello():
-    return '<h1>Hello, World!</h1>'
-
-#endpoint for the api where the request body contains a string
-@app.route('/api', methods=['POST'])
-def api():
-    if request.method == 'POST':
-        #get the string from the request body
-        string = request.data
-        #return the string in the response body
-        return solve_question(string)
-    else:
-        #return an error if the request method is not POST with the correct HTTP code
-        return 'Method not allowed', 405
+logger = logging.getLogger(__name__)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/', methods=['GET'])
+def default_route():
+    return 'Python Template'
+
+
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+    '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
+
+if __name__ == "__main__":
+    logging.info("Starting application ...")
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(('localhost', 8080))
+    port = sock.getsockname()[1]
+    sock.close()
+    app.run(port=port)
