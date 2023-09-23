@@ -41,5 +41,10 @@ def getNextProbableWords(classes, statements):
   for statement in res:
     res[statement] = sorted(
       list(filter(lambda x, statement=statement: x.startswith(statement), word_dump)))[0:5]
-    res[statement] = [item.split(".")[1] if "." in item else '' for item in res[statement]]
+    res[statement] = [item.split(".")[1] if "." in item else "" for item in res[statement]]
+  
+  #for every empty list, add empty string
+  for statement in res:
+    if len(res[statement]) == 0:
+      res[statement].append("")
   return res
