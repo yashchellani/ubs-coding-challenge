@@ -11,11 +11,14 @@ logger = logging.getLogger(__name__)
 @app.route('/greedymonkey', methods=['POST'])
 def greedymonkey():
     data = json.loads(request.data)
+    logging.info("data sent for evaluation {}".format(data))
     w = data["w"]
     v = data["v"]
     f = data["f"]
 
     max_value = max_monkey_value(w, v, f)
+
+    logging.info("My result :{}".format(max_value))
 
     return str(max_value)
 
