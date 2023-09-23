@@ -22,7 +22,7 @@ def getNextProbableWords(classes, statements):
   """
   Solution explanation:
   - We have a word repository that contains all possible permutations of strings that might appear in statements.
-  - For each statement, we filter out the top 5 words in ascending order that contain the statement as a prefix
+  - For each statement, we filter out the top 5 words in ascending order that contain the statement as a prefix.
   - Space complexity: O(C*F), where C = number of classes, F = number of fields in class.
   - Time complexity: O(C*F)
   """
@@ -40,7 +40,6 @@ def getNextProbableWords(classes, statements):
 
   for statement in res:
     res[statement] = sorted(
-      list(filter(lambda x: x.startswith(statement), word_dump)))[0:5]
-    res[statement] = list(item.split(".")[1]
-                          for item in res[statement]) or ['']
+      list(filter(lambda x, statement=statement: x.startswith(statement), word_dump)))[0:5]
+    res[statement] = [item.split(".")[1] if "." in item else '' for item in res[statement]]
   return res
