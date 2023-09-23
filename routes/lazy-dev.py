@@ -8,7 +8,7 @@ from routes import app
 logger = logging.getLogger(__name__)
 
 
-@app.route('//lazy-developer', methods=['POST'])
+@app.route('/lazy-developer', methods=['POST'])
 def evaluate():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
