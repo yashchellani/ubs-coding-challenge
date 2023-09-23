@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 @app.route('/lazy-developer', methods=['POST'])
-def evaluate():
+def evaluate_lazy_dev():
     data = request.get_json()
     logging.info("data sent for evaluation {}".format(data))
     input_value = data.get("input")
